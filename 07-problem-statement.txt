@@ -1,0 +1,31 @@
+07 - Problem Statement (Repository Validation Contract)
+
+Purpose
+This document defines the business context, technical requirements, and evaluation criteria that this repository is expected to satisfy.
+It is intentionally company- and role-agnostic.
+
+Business context (generic)
+- A platform team operates Kubernetes-based services and data pipelines.
+- Reliability requires repeatable recovery and validation, not tribal knowledge.
+- Governance must scale: quality checks, ownership, and safe defaults must be automated.
+
+Technical requirements (what must be true)
+1) Kubernetes-safe defaults
+   - The repository contains a minimal, reviewable Kubernetes workload under `k8s/`.
+   - A local validation command exists to catch unsafe defaults (least privilege markers + NetworkPolicy).
+
+2) Governed data pipeline
+   - The pipeline produces deterministic outputs.
+   - A lineage artifact exists with input/output references and a content hash.
+
+3) Testability with two explicit modes
+   - Tests have two explicit modes:
+     - demo: mocks/fakes/local fixtures only (no external calls)
+     - production: real integrations when correctly configured and explicitly acknowledged
+   - If production prerequisites are missing, the runner prints exactly what is missing and how to re-run.
+
+Top 3 pain points this repository must solve
+1) “Pipelines are hard to trust because validation isn’t enforced.”
+2) “Kubernetes workloads drift into unsafe defaults without guardrails.”
+3) “Integrations are untested until something breaks in production.”
+

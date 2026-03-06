@@ -1,0 +1,41 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: governed-pipeline-demo
+  namespace: governed-pipeline
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      labels:
+        app: governed-pipeline
+    spec:
+      restartPolicy: Never
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: pipeline
+          image: governed-pipeline:dev
+          imagePullPolicy: IfNotPresent
+          command: ["python", "pipelines/pipeline.py", "--format", "jsonl"]
+          volumeMounts:
+            - name: processed
+              mountPath: /app/data/processed
+          resources:
+            requests:
+              cpu: 20m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+      volumes:
+        - name: processed
+          emptyDir: {}
+

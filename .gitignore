@@ -17,6 +17,9 @@ AGENTS.md
 **/AGENTS.md
 AGENTS*.md
 
+# Local-only job postings / prompts (never commit)
+.0*_*.txt
+
 # Python
 __pycache__/
 *.py[cod]
@@ -47,3 +50,6 @@ yarn-error.log*
 
 # Artifacts
 artifacts/
+
+# Generated data outputs
+data/processed/
